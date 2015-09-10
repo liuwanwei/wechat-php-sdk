@@ -1,40 +1,35 @@
 <?php
 include "wechat.class.php";
 
-// 这是最开始使用的测试代码，已经移动到 config_tinydrop.php
+function entry($validate){
+	global $options, $weObj;
 
-$options = array(
-	//填写你设定的 token
-	'token'=>'zhiqu', 
-	//填写加密用的EncodingAESKey，如接口为明文模式可忽略
-	'encodingaeskey'=>'8ZnKfHQ2kpUbiN6zBLvtT0aCREKrDWxwAwwTcFxXfnK',
-	'appid' => '',
-	'appsecret' => '',
-);
+	//明文或兼容模式可以在接口验证通过后注释此句，
+	//但加密模式一定不能注释，否则会验证失败
+	if($validate == true){
+		$weObj->valid();
+	}
 
-$weObj = new Wechat($options);
+	$type = $weObj->getRev()->getRevType();
+	$wpID = $weObj->getRevTo();
+	$userID = $weObj->getRevFrom();
 
-//明文或兼容模式可以在接口验证通过后注释此句，但加密模式一定不能注释，否则会验证失败
-$weObj->valid();
-
-$type = $weObj->getRev()->getRevType();
-$wpID = $weObj->getRevTo();
-$userID = $weObj->getRevFrom();
-
-switch($type) {
-	case Wechat::MSGTYPE_TEXT:
-		$params = getParams($weObj);
-		$weObj->text("欢迎关注!")->reply();
-		break;
-	case Wechat::MSGTYPE_EVENT:
-		$event = $weObj->getRevEvent();
-		handleEvent($event, $weObj);
-		break;
-	case Wechat::MSGTYPE_IMAGE:
-		break;
-	default:
-		$weObj->text("help info")->reply();
+	switch($type) {
+		case Wechat::MSGTYPE_TEXT:
+			$params = getParams($weObj);
+			$weObj->text("欢迎关注!")->reply();
+			break;
+		case Wechat::MSGTYPE_EVENT:
+			$event = $weObj->getRevEvent();
+			handleEvent($event, $weObj);
+			break;
+		case Wechat::MSGTYPE_IMAGE:
+			break;
+		default:
+			$weObj->text("help info")->reply();
+	}
 }
+
 
 function handleRequest(){
 }
