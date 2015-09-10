@@ -1,6 +1,6 @@
 <?php
 
-require_once("wechatEntry.php");
+require_once 'entry.class.php';
 
 $options = array(
 	//填写你设定的 token
@@ -9,6 +9,7 @@ $options = array(
         'encodingaeskey' => '7dMGSfIDB8hnoIy9nh8KeEgeWryG7Er3H5F1YCsgvhD',
 );
 
-$weObj = new Wechat($options);
+// 明文或兼容模式可以在接口验证通过后传入 false ，但加密模式一定不能这样，会验证失败
+$handler = new WechatEntry();
+$handler->entryPoint($options, true);
 
-entry(true);

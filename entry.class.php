@@ -7,7 +7,7 @@ class WechatEntry{
 	private $mpId;
 	private $userId;
 
-	public function entryPoint($validate){
+	public function entryPoint($options, $validate){
 		$weObj = new Wechat($options);
 
 		//明文或兼容模式可以在接口验证通过后注释此句，
@@ -17,17 +17,17 @@ class WechatEntry{
 		}
 
 		$this->type = $weObj->getRev()->getRevType();
-		$this->wpId = $weObj->getRevTo();
+		$this->mpId= $weObj->getRevTo();
 		$this->userId = $weObj->getRevFrom();
 
 		switch($this->type) {
 			case Wechat::MSGTYPE_TEXT:
-				$params = getParams($weObj);
+				$params = $this->getParams($weObj);
 				$weObj->text("欢迎关注!")->reply();
 				break;
 			case Wechat::MSGTYPE_EVENT:
 				$event = $weObj->getRevEvent();
-				handleEvent($event, $weObj);
+				$this->handleEvent($event, $weObj);
 				break;
 			case Wechat::MSGTYPE_IMAGE:
 				break;
@@ -37,18 +37,15 @@ class WechatEntry{
 	}
 
 
-	function handleRequest(){
-	}
-
 	// 关注和取消关注事件处理入口
 	function handleEvent($event, $weObj){
 		$eventName = $event['event'];
 		if($eventName == 'subscribe'){
-			showSubscribeMsg($weObj, "subscribe");
+			$this->showSubscribeMsg($weObj, "subscribe");
 		}else if($eventName == 'unsubscribe'){
-			handleUnscribeMsg($weObj);
+			$this->handleUnscribeMsg($weObj);
 		}else{
-			showSubscribeMsg($weObj, "message");
+			$this->showSubscribeMsg($weObj, "message");
 		}
 	}
 
