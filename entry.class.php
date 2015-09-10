@@ -10,8 +10,6 @@ class WechatEntry{
 	public function entryPoint($options, $validate){
 		$weObj = new Wechat($options);
 
-		//明文或兼容模式可以在接口验证通过后注释此句，
-		//但加密模式一定不能注释，否则会验证失败
 		if($validate == true){
 			$weObj->valid();
 		}
