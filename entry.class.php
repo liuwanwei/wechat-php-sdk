@@ -55,7 +55,7 @@ class WechatEntry{
 			'Title' => '欢迎关注',
 			'Description'=>"",
 			'PicUrl' => 'http://wezhiqu.bl99w.com/images/default_image.jpg',
-			'Url' => $zhiquAction.'&userid='.$this->userId.'&mpid='.$this->mpId ,
+			'Url' => $zhiquAction.'&userId='.$this->userId.'&mpId='.$this->mpId ,
 			)
 		);
 		$weObj->news($newsData)->reply();
